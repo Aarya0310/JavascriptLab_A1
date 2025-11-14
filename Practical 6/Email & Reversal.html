@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Email & String Analyzer</title>
+  <style>
+    /* 🌈 Base Styling */
+    * {
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #d8f3ff, #b7d9ff, #a3caff);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      color: #2b2d42;
+    }
+
+    /* 🌊 Main Card */
+    .container {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 25px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      max-width: 600px;
+      width: 100%;
+      padding: 35px;
+      position: relative;
+      backdrop-filter: blur(12px);
+      transition: transform 0.3s ease;
+    }
+
+    .container:hover {
+      transform: scale(1.02);
+    }
+
+    /* 💫 Title */
+    h2 {
+      text-align: center;
+      color: #0077b6;
+      font-size: 28px;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+      color: #023e8a;
+      margin-top: 25px;
+      font-size: 18px;
+    }
+
+    /* 💎 Inputs & Textareas */
+    input, textarea {
+      width: 100%;
+      padding: 12px 15px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      border: 2px solid #a5d8ff;
+      border-radius: 15px;
+      background: #f0f8ff;
+      font-size: 15px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #0077b6;
+      box-shadow: 0 0 10px rgba(0, 119, 182, 0.3);
+      background: #ffffff;
+    }
+
+    /* 🌤️ Buttons */
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #0077b6, #0096c7, #00b4d8);
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      letter-spacing: 0.5px;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0, 119, 182, 0.4);
+    }
+
+    /* 💧 Output Box */
+    .output {
+      margin-top: 15px;
+      background: linear-gradient(135deg, #e3f2fd, #f1faff);
+      border-left: 5px solid #0096c7;
+      padding: 15px;
+      border-radius: 15px;
+      white-space: pre-wrap;
+      font-size: 15px;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .highlight {
+      color: #0077b6;
+      font-weight: bold;
+    }
+
+    /* 🌟 Floating Glow Dots */
+    .glow {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.4;
+      animation: float 8s infinite ease-in-out alternate;
+    }
+    .glow.blue {
+      background: #0077b6;
+      width: 20px;
+      height: 20px;
+      top: -10px;
+      right: 40px;
+      animation-delay: 0s;
+    }
+    .glow.light {
+      background: #90e0ef;
+      width: 25px;
+      height: 25px;
+      bottom: -15px;
+      left: 30px;
+      animation-delay: 3s;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); opacity: 0.6; }
+      50% { transform: translateY(-15px); opacity: 1; }
+      100% { transform: translateY(0); opacity: 0.6; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="glow blue"></div>
+    <div class="glow light"></div>
+
+    <h2> Email & String Analyzer</h2>
+
+    <h3>1️⃣ Validate Email</h3>
+    <input type="text" id="email" placeholder="Enter your email address 📧">
+    <button onclick="validateEmail()">Validate Email</button>
+    <div class="output" id="emailResult"></div>
+
+    <h3>2️⃣ Analyze Text (Vowel Count & Reverse)</h3>
+    <textarea id="textInput" rows="4" placeholder="Enter your paragraph or message ✨"></textarea>
+    <button onclick="analyzeText()">Analyze Text</button>
+    <div class="output" id="textResult"></div>
+  </div>
+
+  <script>
+    //  Validate Email Function
+    function validateEmail() {
+      let email = document.getElementById("email").value.trim();
+      let resultBox = document.getElementById("emailResult");
+
+      if (email === "") {
+        resultBox.innerHTML = "⚠️ Please enter an email address!";
+        return;
+      }
+
+      let regex = /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+      if (regex.test(email)) {
+        let domain = email.split("@")[1];
+        resultBox.innerHTML = `✅ <span class="highlight">${email}</span> is a valid email.\n🌐 Domain: <span class="highlight">${domain}</span>`;
+      } else {
+        resultBox.innerHTML = `❌ <span class="highlight">${email}</span> is not a valid email address.`;
+      }
+    }
+
+    // 🌊 Count Vowels & Reverse Text Function
+    function analyzeText() {
+      let text = document.getElementById("textInput").value.trim();
+      let resultBox = document.getElementById("textResult");
+
+      if (text === "") {
+        resultBox.innerHTML = "⚠️ Please enter some text to analyze!";
+        return;
+      }
+
+      let vowels = text.match(/[aeiouAEIOU]/g);
+      let vowelCount = vowels ? vowels.length : 0;
+      let reversed = text.split("").reverse().join("");
+
+      resultBox.innerHTML = 
+        `📝 Original Text: ${text}\n` +
+        `💧 Total Vowels: <span class="highlight">${vowelCount}</span>\n` +
+        `🔁 Reversed Text: <span class="highlight">${reversed}</span>`;
+    }
+  </script>
+
+</body>
+</html>

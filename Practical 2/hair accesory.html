@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soft Ties Hair Accessories Shop</title>
+    <style>
+        body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ffdde1, #ee9ca7); 
+    min-height: 100vh;
+    margin: 0;
+}
+        header, footer {
+            margin: 20px 0;
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .product {
+            margin: 20px 0;
+        }
+        img {
+            max-width: 200px;
+            height: auto;
+            margin: 10px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        img.selected {
+            border-color: #ff4081;
+            transform: scale(1.05);
+        }
+
+        /* Popup Styles */
+        .bill-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 20px rgba(0,0,0,0.3);
+            z-index: 1000;
+            width: 300px;
+            text-align: left;
+        }
+        .bill-popup h2 {
+            margin-top: 0;
+            text-align: center;
+        }
+        .bill-popup ul {
+            padding-left: 20px;
+        }
+        .bill-popup .close-btn {
+            display: block;
+            margin: 10px auto 0;
+            padding: 8px 16px;
+            background: #ff4081;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        /* Overlay background */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 999;
+        }
+    </style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soft Ties Hair Accessories Shop</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      min-height: 100vh;
+      margin: 0;
+      color: #333;
+    }
+    header {
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(6px);
+      border-bottom: 2px solid #ffb6c1;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.2rem;
+      color: #ff4081;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 10px;
+    }
+    nav li {
+      display: inline;
+      margin: 0 15px;
+    }
+    nav a {
+      text-decoration: none;
+      font-weight: 600;
+      color: #444;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #ff4081;
+    }
+    section {
+      padding: 40px 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+    section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      color: #d6336c;
+    }
+    section p {
+      color: #555;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+    .product {
+      margin: 40px 0;
+      padding: 25px;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(6px);
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease;
+    }
+    .product:hover {
+      transform: translateY(-5px);
+    }
+    .product h3 {
+      margin-bottom: 5px;
+      color: #c2185b;
+    }
+    .product p {
+      margin-bottom: 15px;
+      font-size: 0.95rem;
+    }
+    img {
+      max-width: 180px;
+      height: auto;
+      margin: 10px;
+      cursor: pointer;
+      border: 3px solid transparent;
+      border-radius: 10px;
+      transition: 0.3s ease-in-out;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    img:hover {
+      transform: scale(1.08);
+    }
+    img.selected {
+      border-color: #ff4081;
+      transform: scale(1.12);
+      box-shadow: 0 6px 15px rgba(255, 64, 129, 0.4);
+    }
+    button {
+      padding: 12px 25px;
+      background: linear-gradient(135deg, #ff6f91, #ff4081);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      margin-top: 15px;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+    button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #d6336c, #ff4081);
+    }
+    footer {
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.6);
+      border-top: 2px solid #ffb6c1;
+      margin-top: 40px;
+    }
+    footer h2 {
+      margin: 0 0 10px;
+      font-size: 1.5rem;
+      color: #ff4081;
+    }
+    footer p {
+      margin: 5px 0;
+      color: #444;
+    }
+    .bill-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      z-index: 1000;
+      width: 320px;
+      text-align: left;
+      animation: popupFade 0.3s ease;
+    }
+    @keyframes popupFade {
+      from {opacity: 0; transform: translate(-50%, -48%);}
+      to {opacity: 1; transform: translate(-50%, -50%);}
+    }
+    .bill-popup h2 {
+      margin-top: 0;
+      text-align: center;
+      color: #ff4081;
+    }
+    .bill-popup ul {
+      padding-left: 20px;
+      margin: 10px 0;
+    }
+    .bill-popup h3 {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 1.2rem;
+      color: #c2185b;
+    }
+    .bill-popup .close-btn {
+      display: block;
+      margin: 15px auto 0;
+      padding: 8px 20px;
+      background: #ff4081;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .bill-popup .close-btn:hover {
+      background: #c2185b;
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Soft Ties Hair Accessories</h1>
+    <nav>
+      <ul>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#products">Products</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="about">
+      <h2>About Us</h2>
+      <p>Welcome to our cute hair accessories shop! We offer a variety of stylish and adorable hair accessories for all ages.</p>
+    </section>
+
+    <section id="products">
+      <h2>Our Products</h2>
+
+      <div class="product" data-price="50">
+        <h3>Floral Hair Clips - ₹50 each</h3>
+        <p>Adorable floral hair clips to brighten up your hairstyle.</p>
+        <img src="https://cdn.fcglcdn.com/brainbees/images/products/zoom/15712597a.webp" alt="Floral Hair Clip 1">
+        <img src="https://cdn.fcglcdn.com/brainbees/images/products/583x720/12735750a.webp" alt="Floral Hair Clip 2">
+        <img src="https://cdn.fcglcdn.com/brainbees/images/products/583x720/10371740a.webp" alt="Floral Hair Clip 3">
+        <img src="https://cdn.fcglcdn.com/brainbees/images/products/583x720/17507044a.webp" alt="Floral Hair Clip 4">
+      </div>
+
+      <div class="product" data-price="70">
+        <h3>Pastel Headbands - ₹70 each</h3>
+        <p>Soft pastel headbands that are both comfortable and stylish.</p>
+        <img src="https://tristarboutique.com/cdn/shop/products/ccb6caeb-644d-4455-98de-9a353f078612.jpg?v=1670575072&width=1206" alt="Pastel Headband 1">
+        <img src="https://tse1.mm.bing.net/th?id=OIP.rU6z-BQcyBjGra0IBBuauQHaHa&pid=Api&P=0&h=180" alt="Pastel Headband 2">
+        <img src="https://tse1.mm.bing.net/th?id=OIP.gRxb7Ko_R3vFnDGQBTMZPAHaHa&pid=Api&P=0&h=180" alt="Pastel Headband 3">
+        <img src="https://i.pinimg.com/736x/ea/41/ba/ea41ba179616c172c4c236e302158da3.jpg" alt="Pastel Headband 4">
+      </div>
+
+      <div class="product" data-price="40">
+        <h3>Bow Hair Ties - ₹40 each</h3>
+        <p>Charming bow hair ties that add a cute touch to any look.</p>
+        <img src="https://tse3.mm.bing.net/th?id=OIP.muFkyKG9aHgWCYb1x0xKMAHaLG&pid=Api&P=0&h=180" alt="Bow Hair Tie 1">
+        <img src="https://tse3.mm.bing.net/th?id=OIP.DEpbEqYZht4HbpoiFL84rgHaJ4&pid=Api&P=0&h=180" alt="Bow Hair Tie 2">
+        <img src="https://tse1.mm.bing.net/th?id=OIP.A0JfNhHB5ZCKJhBrj23xjAHaJ3&pid=Api&P=0&h=180" alt="Bow Hair Tie 3">
+        <img src="https://tse2.mm.bing.net/th?id=OIP.DAUuSkx4viL2xylSL9sHNgHaKX&pid=Api&P=0&h=180" alt="Bow Hair Tie 4">
+      </div>
+    </section>
+
+    <button onclick="generateBill()">🧾 Generate Bill</button>
+  </main>
+
+  <footer id="contact">
+    <h2>Contact Us</h2>
+    <p>Email: info@cutehairaccessories.com</p>
+    <p>Follow us on social media!</p>
+  </footer>
+
+  <div class="overlay" id="overlay"></div>
+  <div class="bill-popup" id="billPopup">
+    <h2>Your Bill</h2>
+    <ul id="billItems"></ul>
+    <h3 id="totalAmount"></h3>
+    <button class="close-btn" onclick="closeBill()">Close</button>
+  </div>
+
+  <script>
+  let selected = [];
+
+  document.querySelectorAll(".product img").forEach(img => {
+    img.onclick = () => {
+      let product = img.closest(".product");
+      let price = +product.dataset.price;
+      let name = product.querySelector("h3").textContent;
+
+      if (img.classList.toggle("selected")) {
+        selected.push({img, price, name});
+      } else {
+        selected = selected.filter(item => item.img !== img);
+      }
+    };
+  });
+
+  function generateBill() {
+    if (!selected.length) return alert("No items selected!");
+    let billList = document.getElementById("billItems");
+    let totalAmount = document.getElementById("totalAmount");
+    billList.innerHTML = "";
+    let total = 0;
+
+    selected.forEach(item => {
+      billList.innerHTML += `<li>${item.name} - ₹${item.price}</li>`;
+      total += item.price;
+    });
+
+    totalAmount.textContent = `Total: ₹${total}`;
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("billPopup").style.display = "block";
+  }
+
+  function closeBill() {
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById("billPopup").style.display = "none";
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GymForm</title>
+<style>
+  body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #cbb4d4, #20002c);
+  background-attachment: fixed;
+  color: #fff;
+  min-height: 100vh;
+  overflow-y: auto; /* enable vertical scroll */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* align from top */
+}
+
+.container {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  border-radius: 20px;
+  width: 500px; /* increased width */
+  margin: 40px 0; /* space from top/bottom */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .gym-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://cdn-icons-png.flaticon.com/512/2335/2335372.png'),
+                      url('https://cdn-icons-png.flaticon.com/512/2335/2335378.png'),
+                      url('https://cdn-icons-png.flaticon.com/512/2335/2335386.png');
+    background-repeat: no-repeat;
+    background-size: 150px, 120px, 180px;
+    background-position: 10% 80%, 85% 20%, 50% 10%;
+    opacity: 0.15;
+    z-index: 0;
+    animation: floatGym 15s ease-in-out infinite alternate;
+  }
+
+  @keyframes floatGym {
+    from { background-position: 10% 80%, 85% 20%, 50% 10%; }
+    to { background-position: 15% 75%, 80% 25%, 45% 15%; }
+  }
+
+  .form-container {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 50px 60px;
+    border-radius: 25px;
+    width: 550px;
+    max-width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h2 {
+    color: #6d28d9;
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-size: 32px;
+    letter-spacing: 1px;
+  }
+
+  p {
+    color: #555;
+    margin-bottom: 25px;
+    font-size: 15px;
+  }
+
+  .progress-container {
+    background: #e5e7eb;
+    border-radius: 10px;
+    height: 10px;
+    margin-bottom: 20px;
+  }
+
+  .progress-bar {
+    background: linear-gradient(90deg, #a855f7, #c084fc);
+    height: 10px;
+    width: 0%;
+    border-radius: 10px;
+    transition: width 0.3s ease-in-out;
+  }
+
+  label {
+    display: block;
+    text-align: left;
+    margin: 10px 0 5px;
+    color: #4b0082;
+    font-weight: 500;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #d1c4e9;
+    border-radius: 10px;
+    outline: none;
+    transition: 0.3s;
+    font-size: 15px;
+    background: #f9f8ff;
+  }
+
+  input:focus, select:focus {
+    border-color: #a855f7;
+    box-shadow: 0 0 5px #a78bfa;
+  }
+
+  small {
+    color: red;
+    font-size: 13px;
+    visibility: hidden;
+  }
+
+  .gender {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 8px;
+  }
+
+  .terms {
+    text-align: left;
+    margin-top: 12px;
+    font-size: 14px;
+  }
+
+  button {
+    background: linear-gradient(90deg, #a855f7, #7c3aed);
+    border: none;
+    color: white;
+    padding: 14px 25px;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+    margin-top: 25px;
+    font-weight: 600;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px #a78bfa;
+  }
+
+  .success {
+    color: green;
+    font-weight: bold;
+    margin-top: 15px;
+  }
+
+  .gym-icon {
+    font-size: 50px;
+    margin-bottom: 10px;
+    color: #7c3aed;
+  }
+</style>
+</head>
+<body>
+
+<div class="gym-bg"></div>
+
+<div class="form-container">
+  <h2>GymForm</h2>
+  <p>Join our community and lift your limits!</p>
+
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <form id="gymForm" onsubmit="return validateForm()">
+
+    <label for="name">Full Name:</label>
+    <input type="text" id="name" onblur="validateName()">
+    <small id="nameError">Please enter a valid name (min 3 letters)</small>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" onblur="validateEmail()">
+    <small id="emailError">Enter a valid email (e.g., user@mail.com)</small>
+
+    <label for="age">Age:</label>
+    <input type="number" id="age" onchange="validateAge()">
+    <small id="ageError">Age must be between 15 and 70</small>
+
+    <label>Gender:</label>
+    <div class="gender">
+      <label><input type="radio" name="gender" value="male" onchange="updateProgress()"> Male</label>
+      <label><input type="radio" name="gender" value="female" onchange="updateProgress()"> Female</label>
+      <label><input type="radio" name="gender" value="other" onchange="updateProgress()"> Other</label>
+    </div>
+
+    <label for="goal">Fitness Goal:</label>
+    <select id="goal" onchange="validateGoal()">
+      <option value="">Select Goal</option>
+      <option value="weight_loss">Weight Loss</option>
+      <option value="muscle_gain">Muscle Gain</option>
+      <option value="endurance">Endurance</option>
+      <option value="general_fitness">General Fitness</option>
+    </select>
+    <small id="goalError">Please select a fitness goal</small>
+
+    <label for="membership">Membership Type:</label>
+    <select id="membership" onchange="validateMembership()">
+      <option value="">Select Membership</option>
+      <option value="monthly">Monthly</option>
+      <option value="quarterly">Quarterly</option>
+      <option value="yearly">Yearly</option>
+    </select>
+    <small id="membershipError">Please select a membership type</small>
+
+    <div class="terms">
+      <label><input type="checkbox" id="terms" onchange="updateProgress()"> I agree to the terms & conditions</label>
+    </div>
+
+    <button type="submit">Join Now</button>
+    <div id="successMessage" class="success"></div>
+  </form>
+</div>
+
+<script>
+  const progressBar = document.getElementById('progressBar');
+  const totalFields = 7;
+
+  function updateProgress() {
+    let completed = 0;
+    if (validateName()) completed++;
+    if (validateEmail()) completed++;
+    if (validateAge()) completed++;
+    if (document.querySelector('input[name="gender"]:checked')) completed++;
+    if (validateGoal()) completed++;
+    if (validateMembership()) completed++;
+    if (document.getElementById('terms').checked) completed++;
+
+    const percent = (completed / totalFields) * 100;
+    progressBar.style.width = percent + "%";
+  }
+
+  function validateName() {
+    const name = document.getElementById('name').value.trim();
+    const error = document.getElementById('nameError');
+    const regex = /^[A-Za-z\s]{3,}$/;
+    if (!regex.test(name)) { error.style.visibility = 'visible'; return false; }
+    else { error.style.visibility = 'hidden'; updateProgress(); return true; }
+  }
+
+  function validateEmail() {
+    const email = document.getElementById('email').value.trim();
+    const error = document.getElementById('emailError');
+    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z]+\.[a-z]{2,}$/;
+    if (!regex.test(email)) { error.style.visibility = 'visible'; return false; }
+    else { error.style.visibility = 'hidden'; updateProgress(); return true; }
+  }
+
+  function validateAge() {
+    const age = document.getElementById('age').value.trim();
+    const error = document.getElementById('ageError');
+    if (age < 15 || age > 70 || age === "") { error.style.visibility = 'visible'; return false; }
+    else { error.style.visibility = 'hidden'; updateProgress(); return true; }
+  }
+
+  function validateGoal() {
+    const goal = document.getElementById('goal').value;
+    const error = document.getElementById('goalError');
+    if (goal === "") { error.style.visibility = 'visible'; return false; }
+    else { error.style.visibility = 'hidden'; updateProgress(); return true; }
+  }
+
+  function validateMembership() {
+    const membership = document.getElementById('membership').value;
+    const error = document.getElementById('membershipError');
+    if (membership === "") { error.style.visibility = 'visible'; return false; }
+    else { error.style.visibility = 'hidden'; updateProgress(); return true; }
+  }
+
+  function validateForm() {
+    const nameValid = validateName();
+    const emailValid = validateEmail();
+    const ageValid = validateAge();
+    const goalValid = validateGoal();
+    const membershipValid = validateMembership();
+    const genderSelected = document.querySelector('input[name="gender"]:checked');
+    const termsAccepted = document.getElementById('terms').checked;
+
+    if (nameValid && emailValid && ageValid && goalValid && membershipValid && genderSelected && termsAccepted) {
+      document.getElementById('successMessage').textContent = "✅ Welcome to GymForm! Your registration is successful.";
+      return false;
+    } else {
+      document.getElementById('successMessage').textContent = "";
+      alert("Please complete all fields correctly before submitting.");
+      return false;
+    }
+  }
+</script>
+
+</body>
+</html>

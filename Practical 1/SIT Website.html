@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SIT Nagpur - Department</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, white, #1e3a8a);
+      color: #333;
+    }
+    header {
+      background: linear-gradient(to right, #1e40af, #1e3a8a);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    header img {
+      height: 60px;
+      background: white;
+      border-radius: 10px;
+      padding: 5px;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    header h1 {
+      display: inline-block;
+      font-size: 28px;
+      vertical-align: middle;
+    }
+    nav {
+      background: white;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      padding: 12px;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    nav a {
+      text-decoration: none;
+      color: #1e3a8a;
+      transition: 0.3s;
+    }
+    nav a:hover {
+      color: #2563eb;
+    }
+    .banner {
+      background: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .banner img {
+      width: 70%;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    }
+    #about {
+      padding: 60px 20px;
+      text-align: center;
+      background: white;
+    }
+    #about h2 {
+      font-size: 32px;
+      color: #1e3a8a;
+      margin-bottom: 40px;
+    }
+    .about-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .about-card {
+      background: linear-gradient(to bottom right, white, #dbeafe);
+      padding: 30px;
+      border-radius: 12px;
+      transition: 0.3s;
+    }
+    .about-card:hover {
+      transform: translateY(-6px);
+    }
+    .about-card div {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+    .about-card h3 {
+      color: #1e40af;
+      margin-bottom: 10px;
+    }
+    #students {
+      background: linear-gradient(to top right, #1e3a8a, #1e40af);
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+    }
+    #students h2 {
+      font-size: 32px;
+      margin-bottom: 30px;
+    }
+    .student-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .student-list .card {
+      background: rgba(255,255,255,0.15);
+      padding: 20px 30px;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .student-list .card:hover {
+      background: rgba(255,255,255,0.3);
+      transform: scale(1.05);
+    }
+    .student-list a {
+      text-decoration: none;
+      color: white;
+    }
+    #register {
+      text-align: center;
+      background: white;
+      padding: 60px 20px;
+    }
+    #register h2 {
+      font-size: 32px;
+      color: #1e3a8a;
+      margin-bottom: 20px;
+    }
+    .register-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 15px 35px;
+      background: #005b96;
+      color: white;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .register-btn:hover {
+      background: linear-gradient(to right, #800000, #003366);
+    }
+    footer {
+      background: #1e3a8a;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 20px;
+    }
+  </style>
+  <script>
+    window.onload = function () {
+      alert("Welcome to SIT Nagpur");
+    };
+  </script>
+</head>
+<body>
+  <header>
+    <img src="logo2.svg" alt="SIT Logo">
+    <h1>SIT Nagpur - Department of Computer Science</h1>
+  </header>
+  <nav>
+    <a href="#about" onclick="alert('Navigating to About Us')">About Us</a>
+    <a href="#students" onclick="alert('Navigating to Students Info')">Student Info</a>
+    <a href="#register" onclick="alert('Navigating to Registration')">Register</a>
+  </nav>
+  <div class="banner">
+    <img src="C:/Users/ADMIN/Downloads/SIBM.webp" alt="College Campus">
+  </div>
+  <section id="about">
+    <h2>About Us</h2>
+    <div class="about-cards">
+      <div class="about-card">
+        <div>💻</div>
+        <h3>Modern Curriculum</h3>
+        <p>Industry-aligned courses covering AI, Machine Learning, Web Development, and more.</p>
+      </div>
+      <div class="about-card">
+        <div>🔬</div>
+        <h3>Research Excellence</h3>
+        <p>Cutting-edge research in emerging technologies and computational sciences.</p>
+      </div>
+      <div class="about-card">
+        <div>🏆</div>
+        <h3>Industry Connect</h3>
+        <p>Strong partnerships with leading tech companies for internships and placements.</p>
+      </div>
+    </div>
+  </section>
+  <section id="students">
+    <h2>Our Students</h2>
+    <div class="student-list">
+      <div class="card"><a href="aarya-bhende.html">Aarya Bhende</a></div>
+      <div class="card"><a href="sukhada-bhoyar.html">Sukhada Bhoyar</a></div>
+      <div class="card"><a href="aaditi-menon.html">Aaditi Menon</a></div>
+      <div class="card"><a href="aarya-jawanjal.html">Aarya Jawanjal</a></div>
+      <div class="card"><a href="gargi.balamwar.html">Gargi Balamwar</a></div>
+    </div>
+  </section>
+  <section id="register">
+    <h2>Student Registration</h2>
+    <a href="#" class="register-btn" onclick="alert('Registration form coming soon!')">Click here to register</a>
+  </section>
+  <footer>
+    © 2025 SIT Nagpur | Department of Computer Science
+  </footer>
+</body>
+</html>

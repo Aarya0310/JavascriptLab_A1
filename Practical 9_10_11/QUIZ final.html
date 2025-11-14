@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Technical Quiz (Local Version)</title>
+<style>
+  /* ---------- Base (Sleeker, classier edges) ---------- */
+  body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #f3e8ff, #fde2e4, #e0f7fa);
+    color: #444;
+    text-align: center;
+    margin: 0;
+    padding: 30px;
+    transition: background 0.35s ease, color 0.35s ease;
+  }
+
+  h1 { font-size: 2.5em; color: #7c5fa3; margin: 0.25em 0; }
+  h2 { color: #6d5b97; margin: 0.5em 0; }
+
+  /* ---------- Page Sections ---------- */
+  .page-section {
+    display: none; /* All sections hidden by default */
+  }
+  #intro-section {
+    display: block; /* Show intro by default */
+  }
+
+  .card {
+    background: #ffffffcc;
+    border-radius: 12px; /* Sleeker edge */
+    padding: 30px;
+    margin: 20px auto;
+    max-width: 700px;
+    box-shadow: 0 8px 20px rgba(150,120,200,0.2);
+    backdrop-filter: blur(6px);
+  }
+
+  /* ---------- Intro Page ---------- */
+  .intro-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  .error-text {
+    color: #a33;
+    min-height: 1.2em;
+    margin-top: 10px;
+  }
+
+  /* ---------- Instructions Page ---------- */
+  .instructions { display:flex; flex-direction:column; align-items:center; gap:15px; margin-top:20px; }
+  .instruction-card {
+    background:#f8f5ff; border:1px solid #e4d8f6; border-radius: 10px; /* Sleeker edge */
+    width:80%; max-width:550px; padding:15px 20px; box-shadow:0 4px 12px rgba(173,149,215,0.15);
+    color:#4b3e75; font-size:1.05em;
+  }
+
+  input[type="text"], input[type="number"]{
+    padding:10px; border-radius: 8px; /* Sleeker edge */ border:1px solid #b8a7f9; margin:8px; width:60%; text-align:center;
+  }
+
+  /* ---------- Quiz Page ---------- */
+  .quiz-section {
+    background:#ffffffcc; border-radius: 12px; /* Sleeker edge */ padding:30px; margin:30px auto; max-width:700px;
+    box-shadow:0 8px 20px rgba(150,120,200,0.2);
+    transition: background 0.35s ease, color 0.35s ease;
+  }
+
+  .question-card {
+    background:#faf5ff; border-radius: 10px; /* Sleeker edge */ padding:25px; box-shadow:0 4px 12px rgba(173,149,215,0.15);
+    margin-bottom:20px;
+  }
+
+  .option {
+    display:block; background:#fff; color:#333; border-radius: 8px; /* Sleeker edge */ padding:10px; margin:10px auto;
+    width:80%; max-width:450px; border:1px solid #e0c9ff; cursor:pointer; transition: all 0.18s ease;
+    text-align:left; 
+  }
+  .option:hover { background:#f1e6ff; transform: scale(1.02); }
+  .option.disabled { pointer-events: none; opacity: 0.9; }
+
+  .option.correct { background: #c3f9d1 !important; }
+  .option.wrong { background: #ffc6c6 !important; }
+
+  button {
+    background-color: #c8b6ff; color:#fff; border:none; border-radius: 10px; /* Sleeker edge */ padding:12px 25px;
+    font-size:1em; cursor:pointer; transition: transform 0.18s, background 0.18s;
+  }
+  button.secondary {
+    background-color: #f0e9ff;
+    color: #7c5fa3;
+    border: 1px solid #c8b6ff;
+  }
+  button.secondary:hover:enabled {
+     background-color: #e6daff;
+  }
+  button:hover:enabled { transform: translateY(-2px); background-color:#b497ff; }
+  button:disabled { background:#dcd2f8; cursor:not-allowed; }
+
+  .result { font-size:1.3em; color:#6a4caf; font-weight:600; margin-top:16px; }
+
+  #darkModeToggle {
+    position: fixed; top: 14px; right:14px; background: #d1b3ff; border-radius: 8px; /* Sleeker edge */ padding:8px 10px;
+    border:none; cursor:pointer; font-size:1.05rem; z-index: 1001;
+  }
+
+  /* ---------- Review & Records Section Styles ---------- */
+  #review-section, #records-list {
+    margin-top: 30px;
+    text-align: left;
+  }
+  .review-item, .record-item {
+    background: #faf5ff;
+    border: 1px solid #e4d8f6;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+  }
+  .review-item strong, .record-item strong {
+    color: #6d5b97;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .record-item-score {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #6a4caf;
+  }
+  .record-item-date {
+    font-size: 0.9em;
+    color: #777;
+    margin-top: 8px;
+  }
+  .review-correct-text {
+    color: #2a753d;
+  }
+  .review-wrong-text {
+    color: #a33;
+  }
+  .review-correct-ans {
+    color: #2a753d;
+    font-weight: bold;
+  }
+
+  /* ---------- Loading Indicator ---------- */
+  #loading-indicator {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    color: #6d5b97;
+    z-index: 1000;
+    padding: 20px;
+    box-sizing: border-box;
+    /* This will be hidden by script */
+  }
+
+
+  /* ---------- DARK MODE ---------- */
+  .dark-mode {
+    background: linear-gradient(135deg, #16161a, #23232a);
+    color: #f1eef9;
+  }
+  .dark-mode h1 { color: #d9caff; }
+  .dark-mode .card,
+  .dark-mode .quiz-section {
+    background: #2d2d33cc;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  }
+  .dark-mode .instruction-card { background:#3b3740; color:#ddd; border:1px solid #4b4750; }
+  .dark-mode .question-card { background:#333; color:#fff; box-shadow:none; }
+  .dark-mode .option { background:#3f3f46; color:#f4f4f8; border:1px solid #555; }
+  .dark-mode .option:hover { background:#52505a; }
+  .dark-mode .option.correct { background:#1f6f3a !important; color:#fff; }
+  .dark-mode .option.wrong { background:#8f2b2b !important; color:#fff; }
+  .dark-mode button { background:#6f52ff; }
+  .dark-mode button.secondary {
+      background-color: #3a3a4d;
+      color: #d9caff;
+      border-color: #6f52ff;
+  }
+  .dark-mode button.secondary:hover:enabled {
+      background-color: #4a4a61;
+  }
+  .dark-mode button:hover:enabled { background:#8a73ff; }
+  .dark-mode .error-text { color: #ffb4b4; }
+  .dark-mode #loading-indicator {
+    background: rgba(20, 20, 25, 0.8);
+    color: #d9caff;
+  }
+
+  /* Dark mode review & records */
+  .dark-mode .review-item,
+  .dark-mode .record-item {
+    background: #333;
+    border-color: #4b4750;
+  }
+  .dark-mode .review-item strong,
+  .dark-mode .record-item strong {
+    color: #d9caff;
+  }
+  .dark-mode .record-item-score { color: #c8b6ff; }
+  .dark-mode .record-item-date { color: #aaa; }
+  .dark-mode .review-correct-text { color: #90ee90; }
+  .dark-mode .review-wrong-text { color: #ffb4b4; }
+  .dark-mode .review-correct-ans { color: #90ee90; }
+</style>
+</head>
+<body>
+  <!-- Dark mode toggle (emoji will change) -->
+  <button id="darkModeToggle" aria-label="Toggle dark mode">🌙</button>
+
+  <!-- Loading Indicator -->
+  <div id="loading-indicator" style="display: none;">Loading...</div>
+
+  <h1>Technical Quiz</h1>
+
+  <!-- Intro -->
+  <div id="intro-section" class="page-section fade-in">
+    <div class="card">
+      <h2>Welcome to the Quiz World ✨</h2>
+      <p>This quiz tests your understanding of <strong>HTML</strong>, <strong>CSS</strong>, and <strong>JavaScript</strong>.</p>
+      <input id="name" type="text" placeholder="Enter your Name" />
+      <br />
+      <input id="prn" type="number" placeholder="Enter your PRN" />
+      <p id="intro-error" class="error-text"></p>
+      <button id="startBtn">Start Quiz</button>
+    </div>
+
+    <div class="intro-buttons">
+        <button id="showInstructionsBtn" class="secondary">Instructions</button>
+        <button id="showRecordsBtn" class="secondary">View Records</button>
+    </div>
+  </div>
+
+  <!-- Instructions -->
+  <div id="instructions-section" class="page-section quiz-section">
+    <h2>Instructions</h2>
+    <div class="instructions">
+      <div class="instruction-card">🌼 Each question has one correct answer.</div>
+      <div class="instruction-card">🌸 Take your time — Next is enabled after 3s.</div>
+      <div class="instruction-card">🌼 Options highlight green/red when chosen.</div>
+      <div class="instruction-card">🌸 Your name will be shown with your score at the end.</div>
+      <div class="instruction-card">✅ Your results will be saved automatically.</div>
+    </div>
+    <br>
+    <button id="backFromInstructionsBtn">Back</button>
+  </div>
+
+  <!-- Records -->
+  <div id="records-section" class="page-section quiz-section">
+    <h2>Your Past Results</h2>
+    <div id="records-list">
+      <p>No records found.</p>
+    </div>
+    <br>
+    <button id="backFromRecordsBtn">Back</button>
+  </div>
+
+  <!-- Quiz -->
+  <div id="quiz-page-section" class="page-section quiz-section" role="region" aria-live="polite">
+    <div id="quiz"></div>
+    <p id="timerDisplay" aria-atomic="true"></p>
+    <button id="nextBtn" disabled>Next ➜</button>
+  </div>
+
+  <!-- Result -->
+  <div id="result-section" class="page-section quiz-section">
+    <h2 id="resultMessage"></h2>
+    <div class="result" id="score"></div>
+    <br />
+    <button id="restartBtn">Back to Home 🏠</button>
+    
+    <!-- New Review Section -->
+    <div id="review-section"></div>
+  </div>
+
+<script type="module">
+  // No Firebase Imports needed
+
+  /* ---------- Questions (Only 5) ---------- */
+  const quizData = [
+    { q:"1️⃣ What does HTML stand for?", opts:["HyperText Markup Language","HighText Machine Language","Hyper Transfer Markup Language","Home Tool Markup Language"], ans:"HyperText Markup Language" },
+    { q:"2. Which CSS property changes text color?", opts:["font-color","color","text-color","font-style"], ans:"color" },
+    { q:"3. What does DOM stand for?", opts:["Document Object Model","Data Object Management","Digital Ordinance Model","Document Order Mechanism"], ans:"Document Object Model" },
+    { q:"4. Which tag links an external CSS file?", opts:["&lt;css&gt;","&lt;link&gt;","&lt;style&gt;","&lt;script&gt;"], ans:"&lt;link&gt;" },
+    { q:"5. JS method to write to HTML document?", opts:["document.write()","console.log()","window.print()","innerHTML()"], ans:"document.write()" }
+  ];
+
+  /* ---------- State ---------- */
+  let current = 0;
+  let score = 0;
+  let userName = "";
+  let userPRN = "";
+  let enableNextTimer = null;
+  let userAnswers = []; // Store answers for review
+  let isAuthReady = true; // Always ready in local version
+
+  /* ---------- Elements ---------- */
+  const loadingIndicator = document.getElementById('loading-indicator');
+  
+  // Page Sections
+  const introSection = document.getElementById('intro-section');
+  const instructionsSection = document.getElementById('instructions-section');
+  const recordsSection = document.getElementById('records-section');
+  const quizPageSection = document.getElementById('quiz-page-section');
+  const resultSection = document.getElementById('result-section');
+  const allSections = document.querySelectorAll('.page-section');
+
+  // Intro
+  const startBtn = document.getElementById('startBtn');
+  const showInstructionsBtn = document.getElementById('showInstructionsBtn');
+  const showRecordsBtn = document.getElementById('showRecordsBtn');
+  const introError = document.getElementById('intro-error');
+  const nameInput = document.getElementById('name');
+  const prnInput = document.getElementById('prn');
+
+  // Instructions
+  const backFromInstructionsBtn = document.getElementById('backFromInstructionsBtn');
+  
+  // Records
+  const backFromRecordsBtn = document.getElementById('backFromRecordsBtn');
+  const recordsList = document.getElementById('records-list');
+  
+  // Quiz
+  const quizDiv = document.getElementById('quiz');
+  const timerDisplay = document.getElementById('timerDisplay');
+  const nextBtn = document.getElementById('nextBtn');
+  
+  // Result
+  const restartBtn = document.getElementById('restartBtn');
+  const reviewSection = document.getElementById('review-section');
+  
+  // Dark Mode
+  const darkToggle = document.getElementById('darkModeToggle');
+
+  /* ---------- Page Navigation ---------- */
+  function showPage(pageId) {
+    allSections.forEach(section => {
+        section.style.display = 'none';
+    });
+    const page = document.getElementById(pageId);
+    if (page) {
+        page.style.display = 'block';
+    } else {
+        console.error("Page not found:", pageId);
+    }
+  }
+
+  /* ---------- Helpers ---------- */
+  function escapeHTML(s){ 
+    return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  }
+  function decodeHTML(html) {
+      let txt = document.createElement("textarea");
+      txt.innerHTML = html;
+      return txt.value;
+  }
+
+  /* ---------- LocalStorage (Replaces Firebase) ---------- */
+
+  async function saveResult(resultData) {
+    console.log("Saving result to localStorage...");
+    try {
+      // Get existing records, or create a new array
+      let records = JSON.parse(localStorage.getItem('quizRecords')) || [];
+      // Add the new result
+      records.push(resultData);
+      // Save the updated array back to localStorage
+      localStorage.setItem('quizRecords', JSON.stringify(records));
+      console.log("Result saved.");
+    } catch (e) {
+      console.error("Error saving to localStorage:", e);
+    }
+  }
+
+  function loadRecords() {
+    console.log("Loading records from localStorage...");
+    try {
+      const records = JSON.parse(localStorage.getItem('quizRecords')) || [];
+      
+      if (records.length === 0) {
+        recordsList.innerHTML = '<p>No records found.</p>';
+        return;
+      }
+
+      // Sort in-memory (descending by timestamp)
+      records.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      
+      displayRecords(records);
+
+    } catch (e) {
+      console.error("Error loading from localStorage:", e);
+      recordsList.innerHTML = '<p>Error loading records.</p>';
+    }
+  }
+
+  function displayRecords(records) {
+    recordsList.innerHTML = ''; // Clear list
+    records.forEach(record => {
+      // Timestamp is now a string, so we parse it
+      const date = new Date(record.timestamp).toLocaleString();
+      const item = document.createElement('div');
+      item.className = 'record-item';
+      item.innerHTML = `
+        <strong>Name: ${escapeHTML(record.name)} (PRN: ${escapeHTML(record.prn)})</strong>
+        <div class="record-item-score">Score: ${record.score} / ${record.total}</div>
+        <div class="record-item-date">${date}</div>
+      `;
+      recordsList.appendChild(item);
+    });
+  }
+
+
+  /* ---------- UI Event Listeners ---------- */
+
+  // --- Intro Page ---
+  startBtn.addEventListener('click', () => {
+    const nm = nameInput.value.trim();
+    const prn = prnInput.value.trim();
+    
+    nameInput.style.borderColor = '#b8a7f9';
+    prnInput.style.borderColor = '#b8a7f9';
+    introError.textContent = '';
+
+    if (!nm || !prn) { 
+      if (!nm) nameInput.style.borderColor = 'red';
+      if (!prn) prnInput.style.borderColor = 'red';
+      introError.textContent = 'Please enter both Name and PRN!';
+      return; 
+    }
+
+    userName = nm;
+    userPRN = prn;
+    showPage('quiz-page-section');
+    
+    current = 0; 
+    score = 0;
+    userAnswers = []; 
+    reviewSection.innerHTML = '';
+    loadQuestion();
+  });
+
+  showInstructionsBtn.addEventListener('click', () => {
+    showPage('instructions-section');
+  });
+
+  showRecordsBtn.addEventListener('click', () => {
+    loadRecords(); // Fetch records when button is clicked
+    showPage('records-section');
+  });
+
+  // --- Instructions Page ---
+  backFromInstructionsBtn.addEventListener('click', () => {
+    showPage('intro-section');
+  });
+
+  // --- Records Page ---
+  backFromRecordsBtn.addEventListener('click', () => {
+    showPage('intro-section');
+    // No listener to unsubscribe from
+  });
+
+
+  /* ---------- Quiz Logic ---------- */
+  function loadQuestion(){
+    clearTimeout(enableNextTimer);
+    const item = quizData[current];
+    
+    let html = `<div class="question-card"><h3>${item.q}</h3>`;
+    html += item.opts.map(o => {
+      return `<div class="option" tabindex="0" role="button">${o}</div>`;
+    }).join('');
+    html += `</div>`;
+    quizDiv.innerHTML = html;
+
+    // Add click listeners to new options
+    document.querySelectorAll('.option').forEach(optionEl => {
+        optionEl.addEventListener('click', () => handleOption(optionEl));
+    });
+
+    nextBtn.disabled = true;
+    timerDisplay.textContent = '⏳ Please wait 3 seconds before Next...';
+
+    enableNextTimer = setTimeout(() => {
+      timerDisplay.textContent = '✅ You can now click Next.';
+      nextBtn.disabled = false;
+    }, 3000);
+  }
+
+  function handleOption(el){
+    document.querySelectorAll('.option').forEach(o => { 
+        o.classList.add('disabled'); 
+        o.style.pointerEvents='none'; 
+    });
+
+    const chosen = el.innerText.trim();
+    const correct = quizData[current].ans;
+    
+    const normalizedCorrect = decodeHTML(correct);
+    let isCorrect = false;
+
+    if(chosen === normalizedCorrect){
+      score++;
+      el.classList.add('correct');
+      isCorrect = true;
+    } else {
+      el.classList.add('wrong');
+      document.querySelectorAll('.option').forEach(o=>{
+        if(o.innerText.trim() === normalizedCorrect){
+          o.classList.add('correct');
+        }
+      });
+    }
+
+    userAnswers.push({
+        q: quizData[current].q,
+        chosen: chosen,
+        correct: normalizedCorrect,
+        isCorrect: isCorrect
+    });
+  }
+
+  nextBtn.addEventListener('click', () => {
+    clearTimeout(enableNextTimer);
+    current++;
+    if(current < quizData.length){
+      loadQuestion();
+    } else {
+      showResult();
+    }
+  });
+
+  /* ---------- Result Logic ---------- */
+  function showResult(){
+    showPage('result-section');
+    document.getElementById('resultMessage').innerText = `🎉 Well done, ${userName}!`;
+    document.getElementById('score').innerText = `You scored ${score} out of ${quizData.length}`;
+
+    buildReview();
+
+    // Save the result to localStorage
+    const resultData = {
+        name: userName,
+        prn: userPRN,
+        score: score,
+        total: quizData.length,
+        answers: userAnswers,
+        timestamp: new Date().toISOString() // Save as standard string
+    };
+    saveResult(resultData);
+  }
+
+  function buildReview() {
+      let reviewHtml = '<h2>Review Your Answers</h2>';
+      userAnswers.forEach((item, index) => {
+          reviewHtml += `<div class="review-item">`;
+          reviewHtml += `<strong>Question ${index + 1}: ${decodeHTML(item.q)}</strong>`;
+          
+          if (item.isCorrect) {
+              reviewHtml += `<div class="review-correct-text">Your answer: ${escapeHTML(item.chosen)} (Correct)</div>`;
+          } else {
+              reviewHtml += `<div class="review-wrong-text">Your answer: ${escapeHTML(item.chosen)} (Wrong)</div>`;
+              reviewHtml += `<div class="review-correct-ans">Correct answer: ${escapeHTML(item.correct)}</div>`;
+          }
+          
+          reviewHtml += `</div>`;
+      });
+      reviewSection.innerHTML = reviewHtml;
+  }
+
+  // --- Result Page ---
+  restartBtn.addEventListener('click', ()=>{
+    showPage('intro-section');
+    // Clear user/prn but keep name
+    nameInput.value = userName;
+    prnInput.value = '';
+    reviewSection.innerHTML = '';
+  });
+
+  /* ---------- Dark Mode Logic ---------- */
+  function setDarkMode(on){
+    document.body.classList.toggle('dark-mode', on);
+    darkToggle.textContent = on ? '☀️' : '🌙';
+    try{ localStorage.setItem('quiz_dark', on ? '1' : '0'); }catch(e){}
+  }
+  darkToggle.addEventListener('click', () => {
+    const isDark = document.body.classList.toggle('dark-mode');
+    darkToggle.textContent = isDark ? '☀️' : '🌙';
+    try{ localStorage.setItem('quiz_dark', isDark ? '1' : '0'); }catch(e){}
+  });
+  
+  /* ---------- Initialization ---------- */
+  
+  // No Firebase auth wait, so just enable buttons
+  startBtn.disabled = false;
+  showRecordsBtn.disabled = false;
+  
+  // Restore saved theme
+  try{
+    if(localStorage.getItem('quiz_dark') === '1') setDarkMode(true);
+  }catch(e){}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cute Max & Min Finder</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+      font-family: "Comic Sans MS", "Poppins", sans-serif;
+    }
+    .card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 25px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      width: 380px;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #ff69b4;
+      font-weight: bold;
+    }
+    input {
+      width: 85%;
+      padding: 12px;
+      border-radius: 15px;
+      border: 2px solid #ffd6e7;
+      outline: none;
+      margin-bottom: 20px;
+      font-size: 15px;
+      text-align: center;
+      background: #fff5fb;
+    }
+    button {
+      padding: 12px 18px;
+      margin: 6px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      transition: transform 0.2s;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    .btn-sample {
+      background: #a6c1ee;
+      color: white;
+    }
+    .btn-find {
+      background: #ffb6c1;
+      color: white;
+    }
+    .result {
+      margin-top: 25px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #444;
+    }
+    .highlight-max {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px 15px;
+      background: #ffdde1;
+      color: #d6336c;
+      border-radius: 15px;
+    }
+    .highlight-min {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px 15px;
+      background: #c1f0f6;
+      color: #0077b6;
+      border-radius: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🌸 Max & Min Finder 🌸</h2>
+    <input type="text" id="numbers" placeholder="Enter numbers (comma-separated)">
+    <br>
+    <button class="btn-find" onclick="findMaxMin()">Find</button>
+    <div class="result" id="output">✨ Results will appear here ✨</div>
+  </div>
+
+  <script>
+    function findMaxMin() {
+      let input = document.getElementById("numbers").value;
+      let arr = input.split(",").map(num => parseFloat(num.trim())).filter(n => !isNaN(n));
+
+      if (arr.length === 0) {
+        document.getElementById("output").innerHTML = "⚠️ Please enter valid numbers!";
+        return;
+      }
+
+      let maxVal = Math.max(...arr);
+      let minVal = Math.min(...arr);
+
+      document.getElementById("output").innerHTML =
+        "<div class='highlight-max'>🌟 Maximum: " + maxVal + "</div>" +
+        "<div class='highlight-min'>💙 Minimum: " + minVal + "</div>";
+    }
+
+    function useSample() {
+      document.getElementById("numbers").value = "25, 78, 12, 89, 5, 64";
+      document.getElementById("output").innerHTML = "🌼 Sample array loaded! 🌼";
+    }
+  </script>
+</body>
+</html>

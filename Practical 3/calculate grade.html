@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBSE Marksheet & CGPA Calculator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        background: white;
+        max-width: 700px;
+        margin: 30px auto;
+        padding: 25px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        border-radius: 12px;
+    }
+    h2 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+    .school-header {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .school-header h3 {
+        margin: 5px;
+        color: #e91e63;
+    }
+    .details {
+        text-align: left;
+        margin: 15px 0;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+    table, th, td {
+        border: 1px solid #2c3e50;
+    }
+    th, td {
+        padding: 10px;
+        text-align: center;
+    }
+    input[type=number] {
+        padding: 5px;
+        width: 80px;
+        text-align: center;
+    }
+    .btn {
+        background-color: #e91e63;
+        color: white;
+        padding: 10px 20px;
+        margin-top: 15px;
+        border: none;
+        cursor: pointer;
+        border-radius: 6px;
+        font-size: 16px;
+    }
+    .btn:hover {
+        background-color: #c2185b;
+    }
+    .result {
+        margin-top: 20px;
+        border-top: 2px solid #2c3e50;
+        padding-top: 15px;
+    }
+    .signature {
+        margin-top: 30px;
+        display: flex;
+        justify-content: space-between;
+        font-style: italic;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="school-header">
+        <h2>Central Board of Secondary Education</h2>
+        <h3>Annual Examination Marksheet</h3>
+    </div>
+
+    <div class="details">
+        <p><b>Student Name:</b> <input type="text" id="studentName" placeholder="Enter Name"></p>
+        <p><b>Roll No:</b> <input type="text" id="rollNo" placeholder="Enter Roll No"></p>
+        <p><b>Class:</b> 12</p>
+    </div>
+
+    <table>
+        <tr><th>Subject</th><th>Marks (out of 100)</th></tr>
+        <tr><td>English</td><td><input type="number" id="english" min="0" max="100"></td></tr>
+        <tr><td>Mathematics</td><td><input type="number" id="math" min="0" max="100"></td></tr>
+        <tr><td>Physics</td><td><input type="number" id="physics" min="0" max="100"></td></tr>
+        <tr><td>Chemistry</td><td><input type="number" id="chemistry" min="0" max="100"></td></tr>
+        <tr><td>Computer Science</td><td><input type="number" id="cs" min="0" max="100"></td></tr>
+    </table>
+
+    <button class="btn" onclick="calculateResult()">Generate Marksheet</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+function calculateResult() {
+    let english = parseFloat(document.getElementById("english").value) || 0;
+    let math = parseFloat(document.getElementById("math").value) || 0;
+    let physics = parseFloat(document.getElementById("physics").value) || 0;
+    let chemistry = parseFloat(document.getElementById("chemistry").value) || 0;
+    let cs = parseFloat(document.getElementById("cs").value) || 0;
+
+    let total = english + math + physics + chemistry + cs;
+    let percentage = (total / 500) * 100;
+    let cgpa = (percentage / 9.5).toFixed(2);
+
+    let grade = "";
+    if (percentage >= 90) grade = "A+";
+    else if (percentage >= 81) grade = "A";
+    else if (percentage >= 66) grade = "B";
+    else if (percentage >= 50) grade = "C";
+    else grade = "Fail";
+
+    let studentName = document.getElementById("studentName").value || "________";
+    let rollNo = document.getElementById("rollNo").value || "________";
+
+    document.getElementById("result").innerHTML = `
+        <h3>Marksheet</h3>
+        <p><b>Name:</b> ${studentName} &nbsp;&nbsp; <b>Roll No:</b> ${rollNo} &nbsp;&nbsp; <b>Class:</b> 12</p>
+        <table>
+            <tr><th>Subject</th><th>Marks</th></tr>
+            <tr><td>English</td><td>${english}</td></tr>
+            <tr><td>Mathematics</td><td>${math}</td></tr>
+            <tr><td>Physics</td><td>${physics}</td></tr>
+            <tr><td>Chemistry</td><td>${chemistry}</td></tr>
+            <tr><td>Computer Science</td><td>${cs}</td></tr>
+            <tr style="background:#fce4ec;"><th>Total Marks</th><th>${total} / 500</th></tr>
+            <tr style="background:#e3f2fd;"><th>Percentage</th><th>${percentage.toFixed(2)}%</th></tr>
+            <tr style="background:#f1f8e9;"><th>CGPA</th><th>${cgpa}</th></tr>
+            <tr style="background:#fff3e0;"><th>Grade</th><th>${grade}</th></tr>
+        </table>
+        <div class="signature">
+            <p>Class Teacher</p>
+            <p>Principal</p>
+        </div>
+    `;
+}
+</script>
+
+</body>
+</html>

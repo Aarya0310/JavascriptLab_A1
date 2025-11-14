@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Palindrome Checker</title>
+<style>
+    body {
+        background-color: lavender;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .container {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0px 4px 20px rgba(0,0,0,0.15);
+        text-align: center;
+        width: 350px;
+        animation: fadeIn 0.8s ease-in-out;
+    }
+    h2 {
+        color: #4B0082;
+        margin-bottom: 15px;
+    }
+    input {
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        width: 80%;
+        margin-bottom: 15px;
+        outline: none;
+        font-size: 16px;
+    }
+    button {
+        padding: 10px 20px;
+        background: #9370DB;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    button:hover {
+        background: #6A5ACD;
+    }
+    #result {
+        margin-top: 15px;
+        font-size: 15px;
+        text-align: left;
+        color: #333;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>Palindrome Checker</h2>
+    <input type="text" id="numInput" placeholder="Enter a number">
+    <br>
+    <button onclick="checkNumber()">Check</button>
+    <p id="result"></p>
+</div>
+
+<script>
+
+function reverseNumber(num) {
+    return parseInt(num.toString().split('').reverse().join(''));
+}
+
+
+const isPalindrome = function(num) {
+    return num === reverseNumber(num);
+};
+
+
+function checkNumber() {
+    try {
+        let num = document.getElementById("numInput").value;
+
+        if (isNaN(num) || num.trim() === "") {
+            throw new Error("Please enter a valid number!");
+        }
+
+        num = parseInt(num);
+        let reversed = reverseNumber(num);
+        let palindromeCheck = isPalindrome(num) ? "Yes, it's a palindrome!" : "No, it's not a palindrome.";
+
+        document.getElementById("result").innerHTML = `
+            <b>Original:</b> ${num} <br>
+            <b>Reversed:</b> ${reversed} <br>
+            <b>Palindrome?</b> ${palindromeCheck}
+        `;
+    }
+    catch (error) {
+        document.getElementById("result").innerHTML = `<span style="color:red;">Error: ${error.message}</span>`;
+    }
+}
+</script>
+</body>
+</html>
